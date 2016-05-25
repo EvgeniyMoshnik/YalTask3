@@ -1,6 +1,9 @@
 package com.example.evgeniy.yaltask3.data;
 
 
+import com.example.evgeniy.yaltask3.R;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,17 +13,40 @@ import java.util.List;
  * Created by Evgeniy
  */
 public class AppealEntity implements Serializable {
+
+    @SerializedName("id")
     private long mId;
+
+    @SerializedName("ticket_id")
     private String mNumber;
+
+    @SerializedName("title")
     private String mCategory;
+
+    @SerializedName("state")
     private State mState;
+
+    @SerializedName("created_date")
     private Date mCreated;
+
+    @SerializedName("start_date")
     private Date mRegistered;
+
+    @SerializedName("deadline")
     private Date mDeadline;
+
+
     private String mResponsible;
+
+    @SerializedName("body")
     private String mFullText;
+    @SerializedName("files")
     private List<String> mImages;
-    private int mIconId;
+
+
+    private int mIconId = R.drawable.ic_build;
+
+    @SerializedName("likes_counter")
     private int mLikeAmount;
 
     public AppealEntity() {
@@ -145,6 +171,11 @@ public class AppealEntity implements Serializable {
 
     public int getDaysAmount() {
         Date nowDate = new Date();
-        return (int) ((nowDate.getTime() - mCreated.getTime()) / (1000 * 24 * 3600));
+        int result = 0;
+        if (mCreated != null) {
+            result = (int) ((nowDate.getTime() - mCreated.getTime()) / (1000 * 24 * 3600));
+        }
+
+        return result;
     }
 }

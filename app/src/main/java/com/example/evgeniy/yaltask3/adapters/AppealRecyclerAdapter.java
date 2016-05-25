@@ -19,6 +19,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Evgeniy
  */
@@ -43,23 +46,16 @@ public class AppealRecyclerAdapter extends RecyclerView.Adapter<AppealRecyclerAd
 
     public class AppealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView mTvCategoryTitle;
-        private TextView mTvTaskDesc;
-        private TextView mTvDaysAmount;
-        private TextView mTvDateCreated;
-        private TextView mTvLikesAmount;
-        private ImageView mIvCategoryIcon;
+        @BindView(R.id.category_title) TextView mTvCategoryTitle;
+        @BindView(R.id.task_desc) TextView mTvTaskDesc;
+        @BindView(R.id.amount_days) TextView mTvDaysAmount;
+        @BindView(R.id.date_created) TextView mTvDateCreated;
+        @BindView(R.id.likes_amount) TextView mTvLikesAmount;
+        @BindView(R.id.category_icon) ImageView mIvCategoryIcon;
 
         public AppealViewHolder(View itemView) {
             super(itemView);
-
-            mTvCategoryTitle = (TextView) itemView.findViewById(R.id.category_title);
-            mIvCategoryIcon = (ImageView) itemView.findViewById(R.id.category_icon);
-            mTvTaskDesc = (TextView) itemView.findViewById(R.id.task_desc);
-            mTvDaysAmount = (TextView) itemView.findViewById(R.id.amount_days);
-            mTvDateCreated = (TextView) itemView.findViewById(R.id.date_created);
-            mTvLikesAmount = (TextView) itemView.findViewById(R.id.likes_amount);
-
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

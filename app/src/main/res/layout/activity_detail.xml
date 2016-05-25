@@ -6,7 +6,7 @@
     android:background="@color/colorBackground"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="com.example.evgeniy.yalantistask2.activities.DetailActivity">
+    tools:context="com.example.evgeniy.yaltask3.activities.DetailActivity">
 
     <include layout="@layout/toolbar_detail" />
 

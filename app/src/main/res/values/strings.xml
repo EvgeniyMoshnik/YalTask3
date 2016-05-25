@@ -56,4 +56,9 @@
         <item>http://gorod.dp.ua/photo/usergorod/2016/03/16/100300.jpg</item>
     </string-array>
 
+
+
+
+    <string name="base_api_url">http://dev-contact.yalantis.com/rest/v1/</string>
+
 </resources>
