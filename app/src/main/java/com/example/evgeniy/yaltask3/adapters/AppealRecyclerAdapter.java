@@ -24,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Evgeniy
  */
@@ -82,6 +85,7 @@ public class AppealRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public class AppealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+<<<<<<< HEAD
         @BindView(R.id.category_title)
         TextView mTvCategoryTitle;
         @BindView(R.id.task_desc)
@@ -94,6 +98,14 @@ public class AppealRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         TextView mTvLikesAmount;
         @BindView(R.id.category_icon)
         ImageView mIvCategoryIcon;
+=======
+        @BindView(R.id.category_title) TextView mTvCategoryTitle;
+        @BindView(R.id.task_desc) TextView mTvTaskDesc;
+        @BindView(R.id.amount_days) TextView mTvDaysAmount;
+        @BindView(R.id.date_created) TextView mTvDateCreated;
+        @BindView(R.id.likes_amount) TextView mTvLikesAmount;
+        @BindView(R.id.category_icon) ImageView mIvCategoryIcon;
+>>>>>>> 97f039340c747a39b8c3773db3fb5e50edfa06cc
 
         public AppealViewHolder(View itemView) {
             super(itemView);

@@ -57,6 +57,7 @@
     </string-array>
 
 
+<<<<<<< HEAD
     <string name="date_format_pattern">MMM d, yyyy</string>
 
     <string name="base_api_url">http://dev-contact.yalantis.com/rest/v1/</string>
@@ -73,5 +74,10 @@
 
     <string name="str_filter_delimiter">,</string>
 
+=======
+
+
+    <string name="base_api_url">http://dev-contact.yalantis.com/rest/v1/</string>
+>>>>>>> 97f039340c747a39b8c3773db3fb5e50edfa06cc
 
 </resources>
