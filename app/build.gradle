@@ -1,10 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
-<<<<<<< HEAD
-apply plugin: 'realm-android'
 
-=======
->>>>>>> 97f039340c747a39b8c3773db3fb5e50edfa06cc
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 23
@@ -42,7 +39,6 @@ dependencies {
     // Retrofit
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-<<<<<<< HEAD
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
 
     // RxJava
@@ -55,6 +51,4 @@ dependencies {
 
     // RealmAdapter
     compile 'io.realm:android-adapters:1.2.0'
-=======
->>>>>>> 97f039340c747a39b8c3773db3fb5e50edfa06cc
 }

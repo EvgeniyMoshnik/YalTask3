@@ -8,10 +8,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-<<<<<<< HEAD
+
         classpath "io.realm:realm-gradle-plugin:1.0.0"
-=======
->>>>>>> 97f039340c747a39b8c3773db3fb5e50edfa06cc
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
