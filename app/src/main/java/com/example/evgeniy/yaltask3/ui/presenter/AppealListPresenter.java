@@ -19,9 +19,7 @@ import java.util.List;
  */
 public class AppealListPresenter implements  AppealListContract.ALPresenter, AppealRecyclerAdapter.OnItemClickListener {
 
-
     AppealListContract.ALModel mModel;
-
     AppealListContract.ALView mView;
     Context mContext;
 
@@ -29,14 +27,12 @@ public class AppealListPresenter implements  AppealListContract.ALPresenter, App
 
     private boolean mLoading;
 
-
     public AppealListPresenter(Context context, AppealListContract.ALView view, String filter) {
         mView = view;
         mContext = context;
         mAppealAdapter = new AppealRecyclerAdapter(context, this);
         mModel = new AppealListModel(context, filter);
     }
-
 
     @Override
     public void init() {
@@ -83,10 +79,6 @@ public class AppealListPresenter implements  AppealListContract.ALPresenter, App
         });
     }
 
-
-
-
-
     @Override
     public void onItemClick(AppealEntity entity) {
 
@@ -95,6 +87,5 @@ public class AppealListPresenter implements  AppealListContract.ALPresenter, App
         Intent intent = new Intent(mContext, DetailActivity.class);
         intent.putExtra(mContext.getString(R.string.key_for_entity), model);
         mContext.startActivity(intent);
-
     }
 }

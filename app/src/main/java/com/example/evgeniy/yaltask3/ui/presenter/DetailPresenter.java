@@ -19,10 +19,8 @@ import com.example.evgeniy.yaltask3.ui.contract.DetailContract;
 public class DetailPresenter implements DetailContract.DDPresenter {
 
     private Context mContext;
-
     private DetailContract.DDView mDetailView;
     private DetailContract.DDModel mModel;
-
 
     public DetailPresenter(Context context) {
         mContext = context;
@@ -41,11 +39,6 @@ public class DetailPresenter implements DetailContract.DDPresenter {
             mDetailView.closeView();
         }
     }
-  //  @Override
-  //  public void onDestroy() {
-
- //   }
-
 
     private void setEntityData() {
 

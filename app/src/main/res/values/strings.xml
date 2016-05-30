@@ -56,8 +56,6 @@
         <item>http://gorod.dp.ua/photo/usergorod/2016/03/16/100300.jpg</item>
     </string-array>
 
-
-
     <string name="date_format_pattern">MMM d, yyyy</string>
 
     <string name="base_api_url">http://dev-contact.yalantis.com/rest/v1/</string>
@@ -73,7 +71,5 @@
     <string name="logout">Logout</string>
 
     <string name="str_filter_delimiter">,</string>
-
-
-
+    
 </resources>

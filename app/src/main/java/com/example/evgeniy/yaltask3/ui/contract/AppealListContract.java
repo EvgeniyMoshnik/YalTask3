@@ -29,10 +29,6 @@ public interface AppealListContract  {
 
             void getNextPage();
 
-         //   void getFirstPage();
-
-         //   boolean isLoading();
-
         }
 
         interface ALView {

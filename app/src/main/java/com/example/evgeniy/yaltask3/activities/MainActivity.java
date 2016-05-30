@@ -48,9 +48,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @BindView(R.id.nav_view)
     NavigationView mNavigationView;
 
-
     private MainActivityContract.MAPresenter mPresenter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         return super.onOptionsItemSelected(item);
     }
 
-
     @OnClick(R.id.fab)
     public void fabClick(View v) {
         Snackbar.make(v, "Snackbar!",
@@ -140,10 +137,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         if (!realmService.isClosed()) {
             realmService.close();
         }
-
         super.onDestroy();
-
     }
-
-
 }
