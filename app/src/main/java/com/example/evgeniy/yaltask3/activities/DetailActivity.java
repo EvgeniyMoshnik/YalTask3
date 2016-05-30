@@ -1,6 +1,6 @@
 package com.example.evgeniy.yaltask3.activities;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,109 +12,64 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.evgeniy.yaltask3.R;
-import com.example.evgeniy.yaltask3.adapters.ImageAdapter;
-import com.example.evgeniy.yaltask3.data.AppealEntity;
+import com.example.evgeniy.yaltask3.ui.contract.DetailContract;
+import com.example.evgeniy.yaltask3.ui.presenter.DetailPresenter;
 
-import java.text.DateFormat;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Evgeniy
  */
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements DetailContract.DDView {
 
-    private TextView mTextViewValueCategory;
-    private TextView mTextViewValueResponsible;
-    private TextView mTextViewDescription;
-    private TextView mTextViewValueStatus;
+    @BindView(R.id.communal_services)
+    TextView mTV_ValueCategory;
+    @BindView(R.id.dnipropetrovsk)
+    TextView mTV_ValueResponsible;
+    @BindView(R.id.problem_description)
+    TextView mTV_Description;
+    @BindView(R.id.textInWorking)
+    TextView mTV_ValueStatus;
 
-    private TextView mTextViewValueCreated;
-    private TextView mTextViewValueRegistered;
-    private TextView mTextViewValueDeadline;
+    @BindView(R.id.creation_date)
+    TextView mTV_ValueCreated;
+    @BindView(R.id.registration_date)
+    TextView mTV_ValueRegistered;
+    @BindView(R.id.deadline)
+    TextView mTV_ValueDeadline;
 
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.toolbar_actionbar)
+    Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-        setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
+        setSupportActionBar(mToolbar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        DetailContract.DDPresenter mDetailPresenter = new DetailPresenter(this);
+        mDetailPresenter.onCreate(getIntent(), this);
 
-        mTextViewValueCreated = (TextView) findViewById(R.id.creation_date);
-        mTextViewValueRegistered = (TextView) findViewById(R.id.registration_date);
-        mTextViewValueDeadline = (TextView) findViewById(R.id.deadline);
-
-
-        mTextViewValueCategory = (TextView) findViewById(R.id.communal_services);
-        mTextViewValueStatus = (TextView) findViewById(R.id.textInWorking);
-        mTextViewValueResponsible = (TextView) findViewById(R.id.dnipropetrovsk);
-        mTextViewDescription = (TextView) findViewById(R.id.problem_description);
-
-        Intent intent = getIntent();
-        AppealEntity entity = (AppealEntity) intent.getSerializableExtra(getString(R.string.key_for_entity));
-
-        if (entity != null) {
-            setEntityData(entity, toolbar);
-        } else {
-            finish();
-        }
-    }
-
-    private void setEntityData(AppealEntity entity, Toolbar actionBar) {
-        if (actionBar != null) {
-            setTitle(entity.getNumber());
-        }
-
-        setRecyclerView(entity);
-        initDates(entity);
-
-        mTextViewValueCategory.setText(entity.getCategory());
-        mTextViewValueResponsible.setText(entity.getResponsible());
-        mTextViewDescription.setText(entity.getFullText());
-
-        switch (entity.getState()) {
-            case IN_WORK:
-                mTextViewValueStatus.setText(R.string.str_in_work);
-                break;
-            case DONE:
-                mTextViewValueStatus.setText(R.string.str_done);
-                break;
-            case WAIT:
-                mTextViewValueStatus.setText(R.string.str_wait);
-                break;
-            default:
-                mTextViewValueStatus.setText(R.string.emptyString);
-                break;
-        }
-    }
-
-    private void initDates(AppealEntity entity) {
-
-        DateFormat dateFormat = android.text.format.DateFormat.getMediumDateFormat(getApplicationContext());
-
-        mTextViewValueRegistered.setText(dateFormat.format(entity.getRegistered()));
-        mTextViewValueCreated.setText(dateFormat.format(entity.getCreated()));
-        mTextViewValueDeadline.setText(dateFormat.format(entity.getDeadline()));
+        initRecyclerView();
     }
 
     // Initialize RecyclerView
-    public void setRecyclerView(AppealEntity entity) {
-
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+    public void initRecyclerView() {
 
         if (mRecyclerView != null) {
             mRecyclerView.setHasFixedSize(true);
 
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
-
-            RecyclerView.Adapter mAdapter = new ImageAdapter(this, entity.getImages());
-            mRecyclerView.setAdapter(mAdapter);
         }
-
     }
 
     // Back button close application
@@ -130,6 +85,37 @@ public class DetailActivity extends AppCompatActivity {
     public void toastShow(View v) {
         String toastMessage = v.getClass().getSimpleName();
         Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void closeView() {
+        finish();
+    }
+
+    @Override
+    public void setTitle(String title) {
+        if (mToolbar != null) {
+            mToolbar.setTitle(title);
+        }
+    }
+
+    @Override
+    public void setValues(String valueCreated, String valueRegistered, String valueDeadline,
+                          String strCategory, String strResponsible, String strDescription, String strState) {
+
+        mTV_ValueRegistered.setText(valueRegistered);
+        mTV_ValueCreated.setText(valueCreated);
+        mTV_ValueDeadline.setText(valueDeadline);
+
+        mTV_ValueCategory.setText(strCategory);
+        mTV_ValueResponsible.setText(strResponsible);
+        mTV_Description.setText(strDescription);
+        mTV_ValueStatus.setText(strState);
+    }
+
+    @Override
+    public void setAdapter(RecyclerView.Adapter adapter) {
+        mRecyclerView.setAdapter(adapter);
     }
 
 }

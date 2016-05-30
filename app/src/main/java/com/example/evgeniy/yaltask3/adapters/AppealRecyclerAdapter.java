@@ -1,65 +1,103 @@
 package com.example.evgeniy.yaltask3.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.evgeniy.yaltask3.R;
-import com.example.evgeniy.yaltask3.data.AppealEntity;
+import com.example.evgeniy.yaltask3.data.model.AppealEntity;
+import com.example.evgeniy.yaltask3.utils.ServiceApiHolder;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Evgeniy
  */
-public class AppealRecyclerAdapter extends RecyclerView.Adapter<AppealRecyclerAdapter.AppealViewHolder> {
+public class AppealRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<AppealEntity> mModel;
 
     private OnItemClickListener mOnItemClickListener;
-    private DateFormat mFormatter = new SimpleDateFormat("MMM d, yyyy", Locale.getDefault());
+    private DateFormat mFormatter;
 
-    public AppealRecyclerAdapter(Context context, List<AppealEntity> model, OnItemClickListener listener) {
+    private String mDays;
+    private String mEmptyString;
+
+    private static final int ITEM = 1;
+    private static final int PROGRESS = 0;
+
+    public AppealRecyclerAdapter(Context context, OnItemClickListener listener) {
         mContext = context;
-        initModel(model);
         mOnItemClickListener = listener;
+        mFormatter = ServiceApiHolder.getFormatter(context);
+        mModel = new ArrayList<>();
+
+        mDays = mContext.getResources().getString(R.string.days);
+        mEmptyString = context.getString(R.string.emptyString);
     }
 
-    private void initModel(Collection<AppealEntity> data) {
-        mModel = new ArrayList<>(data.size());
-        mModel.addAll(data);
+    public void setModel(List<AppealEntity> model) {
+        mModel = model;
+    }
+
+
+    public boolean addAll(Collection<? extends AppealEntity> collection) {
+        return mModel.addAll(collection);
+    }
+
+    public int size() {
+        return mModel.size();
+    }
+
+    public void clear() {
+        mModel.clear();
+    }
+
+    public void add(AppealEntity object) {
+        mModel.add(object);
+    }
+
+    public void remove(int location) {
+        mModel.remove(location);
+    }
+
+    public boolean contains(AppealEntity entity) {
+        return mModel.contains(entity);
     }
 
     public class AppealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView mTvCategoryTitle;
-        private TextView mTvTaskDesc;
-        private TextView mTvDaysAmount;
-        private TextView mTvDateCreated;
-        private TextView mTvLikesAmount;
-        private ImageView mIvCategoryIcon;
+        @BindView(R.id.category_title)
+        TextView mTvCategoryTitle;
+        @BindView(R.id.task_desc)
+        TextView mTvTaskDesc;
+        @BindView(R.id.amount_days)
+        TextView mTvDaysAmount;
+        @BindView(R.id.date_created)
+        TextView mTvDateCreated;
+        @BindView(R.id.likes_amount)
+        TextView mTvLikesAmount;
+        @BindView(R.id.category_icon)
+        ImageView mIvCategoryIcon;
 
         public AppealViewHolder(View itemView) {
             super(itemView);
-
-            mTvCategoryTitle = (TextView) itemView.findViewById(R.id.category_title);
-            mIvCategoryIcon = (ImageView) itemView.findViewById(R.id.category_icon);
-            mTvTaskDesc = (TextView) itemView.findViewById(R.id.task_desc);
-            mTvDaysAmount = (TextView) itemView.findViewById(R.id.amount_days);
-            mTvDateCreated = (TextView) itemView.findViewById(R.id.date_created);
-            mTvLikesAmount = (TextView) itemView.findViewById(R.id.likes_amount);
-
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
@@ -75,25 +113,58 @@ public class AppealRecyclerAdapter extends RecyclerView.Adapter<AppealRecyclerAd
     }
 
     @Override
-    public AppealViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.item_list_card, parent, false);
-        return new AppealViewHolder(v);
+    public int getItemViewType(int position) {
+        return mModel.get(position) != null ? ITEM : PROGRESS;
     }
 
     @Override
-    public void onBindViewHolder(AppealViewHolder holder, int position) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v;
+        RecyclerView.ViewHolder result = null;
 
-        AppealEntity appealEntity = mModel.get(position);
+        switch (viewType) {
+            case ITEM:
+                v = LayoutInflater.from(mContext).inflate(R.layout.item_list_card, parent, false);
+                result = new AppealViewHolder(v);
+                break;
+            case PROGRESS:
+                v = LayoutInflater.from(mContext).inflate(R.layout.progress_item, parent, false);
+                result = new ProgressViewHolder(v);
+                break;
+        }
+        return result;
+    }
 
-        holder.mTvCategoryTitle.setText(appealEntity.getCategory());
-        holder.mTvTaskDesc.setText(appealEntity.getFullText());
-        holder.mTvLikesAmount.setText(String.valueOf(appealEntity.getLikeAmount()));
-        holder.mIvCategoryIcon.setImageDrawable(ContextCompat.getDrawable(mContext, appealEntity.getIconId()));
-        holder.mTvDateCreated.setText(mFormatter.format(appealEntity.getCreated()));
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder vHolder, int position) {
 
-        String days = mContext.getResources().getString(R.string.days);
+        if (vHolder instanceof AppealViewHolder) {
+            AppealEntity appealEntity = mModel.get(position);
+            AppealViewHolder holder = (AppealViewHolder) vHolder;
 
-        holder.mTvDaysAmount.setText(String.valueOf(appealEntity.getDaysAmount()).concat(" ").concat(days));
+            holder.mTvCategoryTitle.setText(appealEntity.getCategory().getName());
+            holder.mTvTaskDesc.setText(appealEntity.getBody());
+            holder.mTvLikesAmount.setText(String.valueOf(appealEntity.getLikesCounter()));
+            holder.mTvDateCreated.setText(mFormatter.format(appealEntity.getCreatedDate()));
+
+            Picasso.with(mContext)
+                    .load(R.drawable.ic_doc)
+                    .into(holder.mIvCategoryIcon);
+
+            Date date = appealEntity.getCreatedDate();
+
+            int daysAmount = -1;
+            if (date != null) {
+                daysAmount = (int) TimeUnit.DAYS
+                        .convert(System.currentTimeMillis() - date.getTime(), TimeUnit.MILLISECONDS);
+           }
+
+            holder.mTvDaysAmount.setText((daysAmount > -1) ? String.valueOf(daysAmount)
+                    .concat(" ").concat(mDays) : mEmptyString);
+
+        } else {
+            ((ProgressViewHolder) vHolder).mProgressBar.setIndeterminate(true);
+        }
 
     }
 
@@ -104,5 +175,16 @@ public class AppealRecyclerAdapter extends RecyclerView.Adapter<AppealRecyclerAd
 
     public interface OnItemClickListener {
         void onItemClick(AppealEntity entity);
+    }
+
+    public class ProgressViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.progress_bar2)
+        ProgressBar mProgressBar;
+
+        public ProgressViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 }

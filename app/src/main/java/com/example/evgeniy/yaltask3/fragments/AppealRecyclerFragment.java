@@ -10,30 +10,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.evgeniy.yaltask3.R;
-import com.example.evgeniy.yaltask3.adapters.AppealRecyclerAdapter;
-import com.example.evgeniy.yaltask3.data.AppealEntity;
-import com.example.evgeniy.yaltask3.data.InitData;
-import com.example.evgeniy.yaltask3.data.State;
-import com.example.evgeniy.yaltask3.utils.InvokerDetail;
-
-import java.util.List;
-
+import com.example.evgeniy.yaltask3.ui.contract.AppealListContract;
+import com.example.evgeniy.yaltask3.utils.AppealListPresenterHolder;
 
 /**
  * Created by Evgeniy
  */
-public class AppealRecyclerFragment extends Fragment {
+public class AppealRecyclerFragment extends Fragment implements AppealListContract.ALView {
 
-    public static final String STATE_KEY = "state";
+    private static final String STATE_KEY = "filter";
+    private AppealListContract.ALPresenter mPresenter;
 
-    private AppealRecyclerAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
-    public static Fragment getInstance(State state) {
+    public static Fragment getInstance(String state) {
 
         Fragment fragment = new AppealRecyclerFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putInt(STATE_KEY, state.getValue());
+        bundle.putString(STATE_KEY, state);
 
         fragment.setArguments(bundle);
 
@@ -44,26 +39,30 @@ public class AppealRecyclerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        State state = State.WAIT;
+        String mFilter = null;
         Bundle params = getArguments();
         if (params != null) {
-            state = State.getByValue(params.getInt(STATE_KEY, -1));
+            mFilter = params.getString(STATE_KEY, null);
         }
-
-        List<AppealEntity> appealList = InitData.getModel(getContext(), state);
-        mAdapter = new AppealRecyclerAdapter(getContext(), appealList, new InvokerDetail(getContext()));
+        mPresenter = AppealListPresenterHolder.getPresenter(getContext(), this, mFilter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        return recyclerView;
+        mPresenter.init();
+
+        return mRecyclerView;
     }
 
+    @Override
+    public void setAdapter(RecyclerView.Adapter adapter) {
+        mRecyclerView.setAdapter(adapter);
+
+    }
 }

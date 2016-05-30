@@ -16,7 +16,9 @@
     <group
         android:id="@+id/menu_login"
         android:checkableBehavior="none">
-        <item android:title="@string/menu_login" />
+        <item
+            android:id="@+id/menu_loginn"
+            android:title="@string/menu_login" />
 
     </group>
 </menu>

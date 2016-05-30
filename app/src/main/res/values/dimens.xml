@@ -95,4 +95,7 @@
     <dimen name="drawer_header_bottom">30dp</dimen>
     <dimen name="drawer_header_side">20dp</dimen>
     <dimen name="drawer_links_padding">20dp</dimen>
+
+
+    <integer name="data_page_size">10</integer>
 </resources>

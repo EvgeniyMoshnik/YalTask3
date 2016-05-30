@@ -6,7 +6,7 @@
     <string name="tab_1">В РОБОТІ</string>
     <string name="tab_2">ВИКОНАНО</string>
     <string name="tab_3">ОЧІКУЄ</string>
-    <string name="emptyString"/>
+    <string name="emptyString" />
 
     <string name="days"> днів</string>
     <string name="key_for_entity">AppealEntity</string>
@@ -16,10 +16,10 @@
     <string name="str_wait">Очікує</string>
 
 
-    <string name="category1" >Комунальне господарство</string>
-    <string name="category2" >Благоустрій та будівництво</string>
-    <string name="respon_1" >Днiпропетровський МВК</string>
-    <string name="respon_2" >Харьковський МВК</string>
+    <string name="category1">Комунальне господарство</string>
+    <string name="category2">Благоустрій та будівництво</string>
+    <string name="respon_1">Днiпропетровський МВК</string>
+    <string name="respon_2">Харьковський МВК</string>
     <string name="full_text1">вул. Б.Кротова, 22, Дніпропетровськ, Відкритий люк (біля рекламного щита)</string>
     <string name="full_text2">Дніпропетровськ, вулиця Олеся Гончара, тріснув фундамент будинку </string>
 
@@ -55,5 +55,23 @@
         <item>http://gorod.dp.ua/photo/usergorod/2016/03/20/100339.jpg</item>
         <item>http://gorod.dp.ua/photo/usergorod/2016/03/16/100300.jpg</item>
     </string-array>
+
+
+    <string name="date_format_pattern">MMM d, yyyy</string>
+
+    <string name="base_api_url">http://dev-contact.yalantis.com/rest/v1/</string>
+    <string name="base_picture_url">http://dev-contact.yalantis.com/files/ticket/</string>
+
+    <string name="in_progress_filter">0,9,5,7,8</string>
+    <string name="done_filter">10,6</string>
+    <string name="wait_filter">1,3,4</string>
+
+    <string name="facebook_app_id">138093679939470</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logout">Logout</string>
+
+    <string name="str_filter_delimiter">,</string>
+
 
 </resources>

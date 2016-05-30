@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Evgeniy
  */
@@ -23,14 +26,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mImageView;
+        @BindView(R.id.imageViewRecycle) ImageView mImageView;
 
         public ViewHolder(View v) {
             super(v);
-            mImageView = (ImageView) v.findViewById(R.id.imageViewRecycle);
+            ButterKnife.bind(this, v);
         }
     }
-
 
     public ImageAdapter(Context context, List<String> model) {
         mContext = context;
@@ -44,16 +46,18 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_detail, parent, false);
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.recycler_item_detail, parent, false);
         return new ViewHolder(v);
     }
 
-
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Picasso.with(mContext).load(mUrlArray.get(position)).error(R.drawable.no_photo_available).into(holder.mImageView);
+        Picasso.with(mContext)
+                .load(mUrlArray.get(position))
+                .error(R.drawable.no_photo_available)
+                .into(holder.mImageView);
     }
-
 
     @Override
     public int getItemCount() {

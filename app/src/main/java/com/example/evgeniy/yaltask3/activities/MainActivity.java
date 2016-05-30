@@ -18,38 +18,53 @@ import android.view.View;
 
 import com.example.evgeniy.yaltask3.R;
 import com.example.evgeniy.yaltask3.adapters.PagerAdapter;
-import com.example.evgeniy.yaltask3.data.State;
-import com.example.evgeniy.yaltask3.fragments.AppealListViewFragment;
-import com.example.evgeniy.yaltask3.fragments.AppealRecyclerFragment;
+import com.example.evgeniy.yaltask3.ui.contract.MainActivityContract;
+import com.example.evgeniy.yaltask3.ui.presenter.MainActivityPresenter;
+import com.example.evgeniy.yaltask3.utils.ServiceApiHolder;
+import com.facebook.FacebookSdk;
+
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.realm.Realm;
 
 /**
  * Created by Evgeniy
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityContract.MAView {
 
-    private DrawerLayout mDrawerLayout;
-    private FloatingActionButton mFab;
+    @BindView(R.id.drawer)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
+
+    @BindView(R.id.viewpager)
+    ViewPager mViewPager;
+    @BindView(R.id.tabs)
+    TabLayout mTabLayout;
+    @BindView(R.id.nav_view)
+    NavigationView mNavigationView;
+
+    private MainActivityContract.MAPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        ButterKnife.bind(this);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         setTitle(R.string.app_title);
 
-        // Setting ViewPager for each Tabs
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        mPresenter = new MainActivityPresenter(this, this);
+        mPresenter.onCreate();
 
-        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
-        if (tabs != null) {
-            tabs.setupWithViewPager(viewPager);
+        if (mTabLayout != null) {
+            mTabLayout.setupWithViewPager(mViewPager);
         }
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
 
         // Adding menu icon to Toolbar
         ActionBar supportActionBar = getSupportActionBar();
@@ -59,38 +74,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Set behavior of Navigation drawer
-        if (navigationView != null) {
-            navigationView.setNavigationItemSelectedListener(
+        if (mNavigationView != null) {
+            mNavigationView.setNavigationItemSelectedListener(
                     new NavigationView.OnNavigationItemSelectedListener() {
                         // This method will trigger on item Click of navigation menu
                         @Override
                         public boolean onNavigationItemSelected(MenuItem menuItem) {
                             // Set item in checked state
-                            menuItem.setChecked(true);
-                            // Closing drawer on item click
-                            mDrawerLayout.closeDrawers();
+                            int id = menuItem.getItemId();
+
+                            switch (id) {
+                                case R.id.all_appeals:
+                                    break;
+                                case R.id.appeals_on_map:
+                                    break;
+                                case R.id.menu_loginn:
+                                    mPresenter.onLoginClick();
+                                    break;
+                            }
+                            mDrawerLayout.closeDrawer(GravityCompat.START);
                             return true;
                         }
                     });
         }
-        //Set FAB
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "Snackbar!",
-                        Snackbar.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    // Add Fragments to Tabs
-    private void setupViewPager(ViewPager viewPager) {
-        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(AppealRecyclerFragment.getInstance(State.IN_WORK), getResources().getString(R.string.tab_1));
-        adapter.addFragment(AppealRecyclerFragment.getInstance(State.DONE), getResources().getString(R.string.tab_2));
-        adapter.addFragment(AppealListViewFragment.getInstance(State.WAIT), getResources().getString(R.string.tab_3));
-        viewPager.setAdapter(adapter);
     }
 
     @Override
@@ -110,7 +116,24 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public FloatingActionButton getFloatingActionButton() {
-        return mFab;
+    @OnClick(R.id.fab)
+    public void fabClick(View v) {
+        Snackbar.make(v, "Snackbar!",
+                Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void setPagerAdapter(PagerAdapter adapter) {
+        mViewPager.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Realm realmService = ServiceApiHolder.getRealmService(this);
+        if (!realmService.isClosed()) {
+            realmService.close();
+        }
+
+        super.onDestroy();
     }
 }
